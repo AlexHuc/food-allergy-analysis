@@ -1,3 +1,6 @@
+# virtual environment
+/food-allergy-analysis_venv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
