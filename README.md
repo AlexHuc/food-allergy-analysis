@@ -1,5 +1,7 @@
 # Food Allergy and Asthma Onset Prediction System
 
+![](./imgs/food_allergy_and_asthma.png)
+
 ## Description of the Problem
 
 ### Background
@@ -65,7 +67,6 @@ python train.py
 ```
 
 **Step 3: Start the Prediction Service**
-Remain in the **root directory** of the project
 
 **Build the Docker image**
 
