@@ -1,331 +1,118 @@
-# Food Allergy Progression Prediction System
+# Food Allergy and Asthma Onset Prediction System
 
 ## Description of the Problem
 
 ### Background
-Food allergies affect millions of people worldwide and can develop at any age, with some individuals experiencing multiple allergies throughout their lifetime. Understanding patterns of allergy development, particularly in pediatric populations, is crucial for early intervention and preventive care. The concept of "atopic march" describes the progression from one allergic condition to another, often following predictable patterns.
+Food allergies and asthma affect millions of people worldwide and can develop at any age, with some individuals experiencing multiple allergic conditions throughout their lifetime. Understanding patterns of allergy development and asthma onset, particularly in pediatric populations, is crucial for early intervention and preventive care.
 
 ### Problem Statement
-Healthcare providers need predictive tools to identify patients at risk of developing new food allergies and estimate when these allergies might manifest. This is a critical healthcare challenge because:
+Healthcare providers need predictive tools to identify patients at risk of developing asthma and estimate when asthma onset might occur. This is a critical healthcare challenge because:
 
-- **Early Detection Saves Lives**: Food allergies can be life-threatening, and early identification allows for preventive measures
+- **Early Detection Saves Lives**: Asthma can be life-threatening, and early identification allows for preventive measures
 - **Healthcare Cost Reduction**: Proactive monitoring is more cost-effective than emergency interventions
-- **Quality of Life**: Families can prepare and adapt lifestyles before severe allergic reactions occur
-- **Clinical Decision Support**: Helps allergists prioritize patients for testing and follow-up care
+- **Quality of Life**: Families can prepare and adapt lifestyles before severe asthmatic episodes occur
+- **Clinical Decision Support**: Helps allergists and pulmonologists prioritize patients for testing and follow-up care
 
 ### Solution Approach
 
-1. **Risk Assessment**: Predict which patients are likely to develop specific food allergies
-2. **Timeline Prediction**: Estimate the age when allergies might manifest
-3. **Clinical Integration**: Deploy as a web service for healthcare provider use
+This project implements a two-stage machine learning pipeline:
 
-The solution uses Random Forest classification for allergy prediction and Linear Regression for age estimation, trained on longitudinal patient data including demographics, existing allergies, and atopic conditions.
+1. **Asthma Risk Classification**: Predict which patients are likely to develop asthma using XGBoost binary classification
+2. **Asthma Onset Age Prediction**: Estimate the age when asthma might manifest using XGBoost regression
+3. **Clinical Integration**: Deploy as a Flask web service for healthcare provider use
+
+The solution uses XGBoost for both classification (asthma risk prediction) and regression (age of onset prediction), trained on longitudinal patient data with features engineered from allergy history and demographic information.
 
 ### Business Impact
 - **For Healthcare Providers**: Evidence-based risk stratification and monitoring schedules
-- **For Patients/Families**: Early awareness and preparation for potential allergic conditions
+- **For Patients/Families**: Early awareness and preparation for potential asthmatic conditions
 - **For Healthcare Systems**: Optimized resource allocation and preventive care protocols
 
 ## Instructions on How to Run the Project
-
 ### Prerequisites
-
 #### System Requirements
 - Python 3.8 or higher
 - Docker (for containerization)
-- 4GB RAM minimum
-- 2GB free disk space
-
-### Quick Start with Docker (Recommended)
-
-1. **Clone the repository:**
-```bash
-git clone https://github.com/yourusername/allergy-prediction.git
-cd allergy-prediction
-```
-
-2. **Build and run with Docker:**
-```bash
-# Build the Docker image
-docker build -t allergy-prediction .
-
-# Run the container
-docker run -p 9696:9696 allergy-prediction
-```
-
-3. **Test the service:**
-```bash
-# Test prediction endpoint
-curl -X POST http://localhost:9696/predict \
-  -H "Content-Type: application/json" \
-  -d '{
-    "gender": "Female",
-    "race": "White", 
-    "has_milk_allergy": 1,
-    "has_egg_allergy": 0,
-    "age_start": 2.5,
-    "atopic_march_cohort": true
-  }'
-```
+- Jupyter Notebook
+- 8GB RAM minimum (for XGBoost training)
+- 4GB free disk space
 
 ### Local Development Setup
-
 #### 1. Environment Setup
 ```bash
 # Create and activate virtual environment
-python -m venv allergy_env
-source allergy_env/bin/activate  # On Windows: allergy_env\Scripts\activate
+python -m venv food-allergy-analysis_venv
+source food-allergy-analysis_venv/bin/activate  # On Windows: food-allergy-analysis_venv\Scripts\activate
 
-# Install dependencies
+# Install dependencies from requirements.txt
 pip install -r requirements.txt
 ```
 
 #### 2. Data Setup
-The dataset is included in the `data/` folder. If you need to download it separately:
-```bash
-# Download dataset (example - replace with actual source)
-wget https://example.com/allergy_data.csv -O data/allergy_data.csv
-```
+The dataset (`food-allergy-analysis-Zenodo.csv`) is included in the `data/` folder there you will find a comprehensive documentation of each column.
 
 #### 3. Run the Complete Pipeline
-
-**Step 1: Explore the data and train models**
+**Step 1: Data Analysis and Model Training**
 ```bash
-# Open Jupyter notebook for exploration
+# Open Jupyter notebook for complete pipeline
 jupyter notebook notebook.ipynb
 ```
 
-**Step 2: Train the final model**
+**Step 2: Train Models (Optional - models are pre-trained)**
 ```bash
-# Train and save the model
+# Train and save both XGBoost models
 python train.py
 ```
 
-**Step 3: Start the prediction service**
+**Step 3: Start the Prediction Service**
+Remain in the **root directory** of the project
+
+**Build the Docker image**
+
+Remain in the **root directory** of the project.
+
 ```bash
-# Start Flask web service
-python predict.py
+docker build -t asthma-predictor -f deployment/flask/Dockerfile .
 ```
 
-The service will be available at `http://localhost:9696`
+**Run the Docker container**
+```bash
+docker run -it --rm -p 9696:9696 asthma-predictor
+```
+
+- This will start the Flask service.
+- The API endpoint will be available at: http://localhost:9696/predict.
+
+**Test the service**
+
+1. Navigate to the `deployment/flask` directory:
+
+```bash
+cd deployment/flask
+```
+2. Open and run the `predict_test.ipynb` notebook to test the application.
 
 ### Project Structure
 ```
-allergy-prediction/
-├── README.md                          # This file
-├── notebook.ipynb                     # Data exploration and model development
-├── train.py                          # Training script
-├── predict.py                        # Web service for predictions
-├── requirements.txt                   # Python dependencies
-├── Pipfile                           # Pipenv dependencies
-├── Pipfile.lock                      # Pipenv lock file
-├── Dockerfile                        # Container configuration
+food-allergy-analysis/
+├── README.md                                             # This file
+├── notebook.ipynb                                        # Complete data analysis and model development
+├── train.py                                              # Training script for both models
 ├── data/
-│   └── allergy_data.csv              # Dataset
+│   ├── food-allergy-analysis-Zenodo.csv                  # Main dataset
+│   └── README.md                                         # Data documentation
 ├── models/
-│   ├── random_forest_model.pkl       # Trained classification model
-│   └── scaler.pkl                    # Feature scaler
-├── src/
-│   ├── __init__.py
-│   ├── data_preprocessing.py
-│   └── feature_engineering.py
+│   ├── model_xgb_class_eda=0.05_max_depth=6_min_child_weight=30.bin  # XGBoost classification model
+│   ├── model_xgb_reg_eda=0.05_max_depth=6_min_child_weight=30.bin    # XGBoost regression model
+│   └── README.md                                                     # Model documentation
 └── deployment/
-    ├── kubernetes/
-    │   ├── deployment.yaml
-    │   └── service.yaml
-    └── cloud_deploy.py
+    ├── flask/
+    │   ├── Dockerfile                                    # Docker container configuration
+    │   ├── Pipfile                                       # Pipenv dependencies
+    │   ├── Pipfile.lock                                  # Pipenv lock file
+    │   ├── predict.py                                    # Flask web service
+    │   ├── predict_test.ipynb                            # API testing notebook
+    │   └── README.md                                     # Deployment documentation
+    └── kubernetes/
+        └── README.md                                     # Kubernetes deployment docs
 ```
-
-### Environment Management Options
-
-#### Option 1: Using pip and virtualenv
-```bash
-pip install -r requirements.txt
-```
-
-#### Option 2: Using Pipenv (Recommended)
-```bash
-# Install Pipenv if not already installed
-pip install pipenv
-
-# Install dependencies and create virtual environment
-pipenv install
-
-# Activate virtual environment
-pipenv shell
-
-# Run the project
-pipenv run python train.py
-```
-
-#### Option 3: Using conda
-```bash
-# Create environment from environment.yml
-conda env create -f environment.yml
-
-# Activate environment
-conda activate allergy-prediction
-```
-
-### Usage Examples
-
-#### Training a New Model
-```bash
-# Train with default parameters
-python train.py
-
-# Train with custom parameters
-python train.py --max_depth 10 --n_estimators 200 --test_size 0.3
-```
-
-#### Making Predictions via API
-```bash
-# Start the service
-python predict.py
-
-# Make a prediction
-curl -X POST http://localhost:9696/predict \
-  -H "Content-Type: application/json" \
-  -d '{
-    "gender": "Male",
-    "race": "Asian",
-    "ethnicity": "Non-Hispanic",
-    "has_milk_allergy": 1,
-    "has_egg_allergy": 1,
-    "age_start": 3.0,
-    "atopic_march_cohort": true
-  }'
-```
-
-### Containerization
-
-#### Building the Docker Image
-```bash
-# Build the image
-docker build -t allergy-prediction:latest .
-
-# Run the container
-docker run -p 9696:9696 allergy-prediction:latest
-
-# Run with environment variables
-docker run -p 9696:9696 -e MODEL_PATH=/app/models allergy-prediction:latest
-```
-
-#### Docker Compose (Optional)
-```bash
-# Run with docker-compose
-docker-compose up
-
-# Run in background
-docker-compose up -d
-```
-
-### Cloud Deployment
-
-#### AWS ECS Deployment
-```bash
-# Configure AWS CLI
-aws configure
-
-# Deploy to ECS
-python deployment/deploy_aws.py
-
-# Get service URL
-aws ecs describe-services --cluster allergy-prediction --services allergy-service
-```
-
-#### Kubernetes Deployment
-```bash
-# Apply Kubernetes manifests
-kubectl apply -f deployment/kubernetes/
-
-# Check deployment status
-kubectl get pods
-
-# Get service URL
-kubectl get service allergy-prediction-service
-```
-
-#### Testing Deployed Service
-```bash
-# Replace with your deployed URL
-export SERVICE_URL="https://your-deployed-service.com"
-
-curl -X POST $SERVICE_URL/predict \
-  -H "Content-Type: application/json" \
-  -d '{
-    "gender": "Female",
-    "race": "White",
-    "has_milk_allergy": 1,
-    "age_start": 2.0
-  }'
-```
-
-### Troubleshooting
-
-#### Common Issues
-
-1. **Port already in use:**
-```bash
-# Kill process using port 9696
-lsof -ti:9696 | xargs kill
-```
-
-2. **Docker build fails:**
-```bash
-# Clean Docker cache
-docker system prune -a
-```
-
-3. **Missing dependencies:**
-```bash
-# Reinstall requirements
-pip install --force-reinstall -r requirements.txt
-```
-
-4. **Model file not found:**
-```bash
-# Retrain the model
-python train.py
-```
-
-### Performance Metrics
-
-- **Classification Accuracy**: >80% for primary food allergies
-- **Regression RMSE**: <2.5 years for age prediction
-- **API Response Time**: <200ms average
-- **Service Uptime**: >99% availability target
-
-### API Documentation
-
-#### Endpoints
-
-**POST /predict**
-- **Description**: Predict future allergies for a patient
-- **Input**: JSON with patient features
-- **Output**: JSON with allergy predictions and confidence scores
-
-**GET /health**
-- **Description**: Health check endpoint
-- **Output**: Service status
-
-**GET /model/info**
-- **Description**: Get model metadata
-- **Output**: Model version, training date, performance metrics
-
-### Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make changes and add tests
-4. Submit a pull request
-
-### License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
----
-
-**Service URL**: https://allergy-prediction-service.herokuapp.com/predict
-
-**Demo Video**: See `demo/service_demo.mp4` for interaction examples
