@@ -3,12 +3,12 @@ import xgboost as xgb
 from flask import Flask, request, jsonify
 
 # Load the classification model
-class_model_file = './model/model_xgb_class_eda=0.05_max_depth=6_min_child_weight=30.bin'
+class_model_file = 'models/model_xgb_class_eda=0.05_max_depth=6_min_child_weight=30.bin'
 with open(class_model_file, 'rb') as f_in:
     (dv_class, model_class) = pickle.load(f_in)
 
 # Load the regression model
-reg_model_file = './model/model_xgb_reg_eda=0.05_max_depth=6_min_child_weight=30.bin'
+reg_model_file = 'models/model_xgb_reg_eda=0.05_max_depth=6_min_child_weight=30.bin'
 with open(reg_model_file, 'rb') as f_in:
     (dv_reg, model_reg) = pickle.load(f_in)
 

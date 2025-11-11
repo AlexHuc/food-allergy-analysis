@@ -149,7 +149,7 @@ final_class_model = xgb.train(xgb_params, dtrain, num_boost_round=200)
 
 ## 3.7. Save the Model - XGBoost - Classification Model
 
-class_output_file = f'./model/model_xgb_class_eda={eta_class}_max_depth={max_depth_class}_min_child_weight={min_child_weight_class}.bin'
+class_output_file = f'./models/model_xgb_class_eda={eta_class}_max_depth={max_depth_class}_min_child_weight={min_child_weight_class}.bin'
 with open(class_output_file, 'wb') as f_out:
     pickle.dump((dv, final_class_model), f_out)
 
@@ -261,6 +261,6 @@ xgb_params_reg = {
 final_reg_model = xgb.train(xgb_params_reg, dtrai_reg, num_boost_round=200)
 
 ## 4.7. Save the Model - XGBoost - Regression Model
-reg_output_file = f'./model/model_xgb_reg_eda={eta_reg}_max_depth={max_depth_reg}_min_child_weight={min_child_weight_reg}.bin'
+reg_output_file = f'./models/model_xgb_reg_eda={eta_reg}_max_depth={max_depth_reg}_min_child_weight={min_child_weight_reg}.bin'
 with open(reg_output_file, 'wb') as f_out:
     pickle.dump((dv, final_reg_model), f_out)
