@@ -1,6 +1,6 @@
 # Food Allergy and Asthma Onset Prediction System
 
-![](./imgs/food_allergy_and_asthma.png)
+![Food Allergy and Asthma](./imgs/food_allergy_and_asthma.png)
 
 ## Description of the Problem
 

@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: asthma-prediction
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: asthma-prediction-config
+  namespace: asthma-prediction
+data:
+  FLASK_ENV: "production"
+  MODEL_PATH: "/app/models"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: asthma-prediction-deployment
+  namespace: asthma-prediction
+  labels:
+    app: asthma-prediction
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: asthma-prediction
+  template:
+    metadata:
+      labels:
+        app: asthma-prediction
+    spec:
+      containers:
+        - name: asthma-prediction
+          image: asthma-predictor:latest
+          imagePullPolicy: Never  # Use local image built with minikube docker-env
+          ports:
+            - containerPort: 9696
+              name: http
+          envFrom:
+            - configMapRef:
+                name: asthma-prediction-config
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+            requests:
+              cpu: 250m
+              memory: 512Mi
+          # Health checks
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 9696
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 9696
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: asthma-prediction-service
+  namespace: asthma-prediction
+  labels:
+    app: asthma-prediction
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 9696
+      nodePort: 30080
+      protocol: TCP
+      name: http
+  selector:
+    app: asthma-prediction

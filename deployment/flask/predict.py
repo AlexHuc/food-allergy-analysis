@@ -48,6 +48,11 @@ REQUIRED_REGRESSION_FEATURES = [
     'ALLERGIC_RHINITIS_START'
 ]
 
+# Health check endpoint
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({'status': 'healthy'}), 200
+
 @app.route('/predict', methods=['POST'])
 def predict():
     patient = request.get_json()
