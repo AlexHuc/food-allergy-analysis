@@ -106,24 +106,33 @@ This will deploy the Flask application to Kubernetes.
 ### Project Structure
 ```
 food-allergy-analysis/
-├── README.md                                             # This file
-├── notebook.ipynb                                        # Complete data analysis and model development
-├── train.py                                              # Training script for both models
 ├── data/
 │   ├── food-allergy-analysis-Zenodo.csv                  # Main dataset
 │   └── README.md                                         # Data documentation
+├── deployment/
+│   ├── flask/
+│   │   ├── Dockerfile                                    # Docker container configuration
+│   │   ├── Pipfile                                       # Pipenv dependencies
+│   │   ├── Pipfile.lock                                  # Pipenv lock file
+│   │   ├── predict_test.ipynb                            # API testing notebook
+│   │   ├── predict.py                                    # Flask web service
+│   │   └── README.md                                     # Flask deployment documentation
+│   └── kubernetes/
+│       ├── deploy.sh                                     # Deployment script
+│       ├── deployment.yaml                               # Kubernetes manifests
+│       └── README.md                                     # Kubernetes deployment docs
+├── imgs/
+│   ├── docker_and_flask.png                              # Flask deployment visualization
+│   ├── food_allergy_and_asthma.png                       # Project header image
+│   ├── KubernetesDeploy.gif                              # Kubernetes deployment demo
+│   ├── minikube_and_kubernetes.png                       # K8s deployment visualization
+│   └── README.md                                         # Images documentation
 ├── models/
-│   ├── model_xgb_class_eda=0.05_max_depth=6_min_child_weight=30.bin  # XGBoost classification model
-│   ├── model_xgb_reg_eda=0.05_max_depth=6_min_child_weight=30.bin    # XGBoost regression model
+│   ├── model_xgb_class_eda=0.05_max_depth=6_min_child_weight=30.bin  # Classification model
+│   ├── model_xgb_reg_eda=0.05_max_depth=6_min_child_weight=30.bin    # Regression model
 │   └── README.md                                                     # Model documentation
-└── deployment/
-    ├── flask/
-    │   ├── Dockerfile                                    # Docker container configuration
-    │   ├── Pipfile                                       # Pipenv dependencies
-    │   ├── Pipfile.lock                                  # Pipenv lock file
-    │   ├── predict.py                                    # Flask web service
-    │   ├── predict_test.ipynb                            # API testing notebook
-    │   └── README.md                                     # Deployment documentation
-    └── kubernetes/
-        └── README.md                                     # Kubernetes deployment docs
+├── notebook.ipynb                                        # Complete data analysis and model 
+├── README.md                                             # This file - project overview
+├── requirements.txt                                      # Python dependencies
+└── train.py                                              # Training script for both models
 ```
