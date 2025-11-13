@@ -4,6 +4,10 @@
 
 This project includes a complete Kubernetes deployment setup for the Asthma Prediction Service using minikube for local development and testing.
 
+# Record of Deployment on Kubernetes
+
+![Kubernetes Deploy](../../imgs/KubernetesDeploy.gif)
+
 ## 📋 Prerequisites
 
 - [Docker](https://www.docker.com/) installed and running

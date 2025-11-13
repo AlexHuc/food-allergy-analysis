@@ -93,6 +93,16 @@ cd deployment/flask
 ```
 2. Open and run the `predict_test.ipynb` notebook to test the application.
 
+**Step 4: Kubernetes Deployment**
+
+Run in the root directory of the project:
+```bash
+./deployment/kubernetes/deploy.sh
+```
+
+This will deploy the Flask application to Kubernetes. 
+[For more details and a video recording, see the README.md in `./deployment/kubernetes`]
+
 ### Project Structure
 ```
 food-allergy-analysis/
