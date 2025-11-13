@@ -1,5 +1,6 @@
 import pickle
 import xgboost as xgb
+from datetime import datetime
 from flask import Flask, request, jsonify
 
 # Load the classification model
@@ -48,10 +49,14 @@ REQUIRED_REGRESSION_FEATURES = [
     'ALLERGIC_RHINITIS_START'
 ]
 
-# Health check endpoint
 @app.route('/health', methods=['GET'])
 def health():
-    return jsonify({'status': 'healthy'}), 200
+    """Health check endpoint"""
+    return jsonify({
+        'status': 'healthy',
+        'service': 'asthma-prediction',
+        'timestamp': str(datetime.now())
+    })
 
 @app.route('/predict', methods=['POST'])
 def predict():

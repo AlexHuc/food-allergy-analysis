@@ -1,5 +1,7 @@
 # Flask Deployment for Asthma Prediction Service
 
+![Docker and Flask](../../imgs/docker_and_flask.png)
+
 This folder contains the Dockerized Flask service for serving the asthma prediction machine learning models.  
 It includes the `Pipfile`, `Pipfile.lock`, and `Dockerfile` used to build and run the service.
 
