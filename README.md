@@ -110,6 +110,7 @@ food-allergy-analysis/
 │   ├── food-allergy-analysis-Zenodo.csv                  # Main dataset
 │   └── README.md                                         # Data documentation
 ├── deployment/
+│   ├── README.md
 │   ├── flask/
 │   │   ├── Dockerfile                                    # Docker container configuration
 │   │   ├── Pipfile                                       # Pipenv dependencies
